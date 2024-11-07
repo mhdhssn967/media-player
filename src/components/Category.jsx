@@ -4,7 +4,14 @@ import { deleteCategoryAPI, getAllCategoryAPI, saveCategoryAPI, saveVideoAPI, up
 import VideoCard from './VideoCard';
 
 
-const Category = ({setDeleteResponseFromCategory}) => {
+const categoryVideoDragStarted=(e,dragVideoDetails,categoryDetails)=>{
+  console.log('Inside Category Video Drag Started');
+  
+  let dragData={video:dragVideoDetails,categoryDetails}
+    e.dataTransfer.setData("dragData",JSON.stringify(dragData))
+}
+
+const Category = ({setDeleteResponseFromCategory,deleteResponseFromView}) => {
   const [allCategories,setAllCategories]=useState([])
   const [show, setShow] = useState(false);
 
@@ -56,7 +63,7 @@ const Category = ({setDeleteResponseFromCategory}) => {
 
     useEffect(()=>{
       getAllCategories()
-    },[])
+    },[deleteResponseFromView])
 
     const dragoverCategory=(e)=>{
       e.preventDefault()
@@ -97,7 +104,7 @@ const Category = ({setDeleteResponseFromCategory}) => {
             {
             categoryDetails?.allVideos?.length>0 &&
             categoryDetails?.allVideos?.map(video=>(
-              <div key={video?.id} className='col-lg-4'>
+              <div draggable={true} onDragStart={(e=>categoryVideoDragStarted(e,video,categoryDetails))} key={video?.id} className='col-lg-4'>
                 <VideoCard insideCategory={true} displayData={video}/>
               {/* Video card */}
               </div>

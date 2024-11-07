@@ -1,7 +1,6 @@
 import React,{useState} from 'react'
 import { Modal,Card } from 'react-bootstrap'
 import { removeVideoAPI, saveHistoryAPI } from "../services/allAPI"
-import './vcard.css'
 
 const VideoCard = ({displayData,setDeleteVideoResponseFromVideoCard,insideCategory}) => {
   const [show, setShow] = useState(false);

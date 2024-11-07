@@ -1,17 +1,17 @@
 import React from 'react'
 import { Col, Row } from 'react-bootstrap'
 import VideoCard from './VideoCard'
-import { getAllVideosAPI } from '../services/allAPI'
+import { getAllVideosAPI, updateCategoryAPI,saveVideoAPI } from '../services/allAPI'
 import { useEffect,useState } from 'react'
 
-const View = ({addResponseFromHome,deleteResponseFromcategory}) => {
+const View = ({addResponseFromHome,deleteResponseFromCategory,setDeleteResponseFromView}) => {
 
   const [deleteVideoResponseFromVideoCard,setDeleteVideoResponseFromVideoCard]=useState("")
   const [allVideos,setAllVideos]=useState([])
   useEffect(()=>{
     getAllVideos()
     
-  },[addResponseFromHome,deleteVideoResponseFromVideoCard,deleteResponseFromcategory])
+  },[addResponseFromHome,deleteVideoResponseFromVideoCard,deleteResponseFromCategory,setDeleteResponseFromView])
   console.log(allVideos);
   
 
@@ -24,15 +24,39 @@ const View = ({addResponseFromHome,deleteResponseFromcategory}) => {
         setAllVideos(result.data)
       }
     }
+
     catch(err){
       console.log(err);
       
     }
   }
+  const dragOverView=(e)=>{
+  e.preventDefault()
+}
+const categoryVideoDropOverView=async(e)=>{
+  console.log("Inside CategoriesVideoDropOverView");
+  const {video,categoryDetails}=JSON.parse(e.dataTransfer.getData("dragData"))
+  console.log(video,categoryDetails);
+  // updating category by deleting video from category
+  // use state lifting to communicate data from view to category
+  // use api t o upload videos
+  // call getall
+  const updateCategoryVideoList=categoryDetails?.allVideos?.filter(item=>item.id!=video?.id)
+  const updatedCategory={...categoryDetails,allVideos:updateCategoryVideoList}
+    console.log(updatedCategory);
+    const result=await updateCategoryAPI(updatedCategory)
+    setDeleteResponseFromView(result)
+    await saveVideoAPI(video)
+    getAllVideos()
+    
+  }
 
-  return (
+
+
+
+return (
     <>
-     <Row> 
+     <Row droppable="true" onDragOver={dragOverView} onDrop={e=>categoryVideoDropOverView(e)}> 
      { 
      allVideos?.length>0?
      allVideos?.map(video=>(
@@ -45,5 +69,6 @@ const View = ({addResponseFromHome,deleteResponseFromcategory}) => {
     </>
   )
 }
+
 
 export default View

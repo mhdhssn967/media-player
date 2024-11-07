@@ -5,7 +5,8 @@ import View from '../components/View'
 import Category from '../components/Category'
 
 const Home = () => {
-  const [deleteResponseFromcategory,setDeleteResponseFromCategory]=useState("")
+  const [deleteResponseFromView,setDeleteResponseFromView]=useState("")
+  const [deleteResponseFromCategory,setDeleteResponseFromCategory]=useState("")
   const [addResponseFromHome,setAddResponseFromHome]=useState("")
   return (
     <div style={{paddingTop:'100px'}}>
@@ -16,10 +17,10 @@ const Home = () => {
       <div className="container-fluid row my-5">
         <div className='col-lg-6'>
           <h3>All Videos</h3>
-          <View addResponseFromHome={addResponseFromHome} deleteResponseFromcategory={deleteResponseFromcategory}/>
+          <View setDeleteResponseFromView={setDeleteResponseFromView} addResponseFromHome={addResponseFromHome} deleteResponseFromCategory={deleteResponseFromCategory}/>
         </div>
         <div className="col-lg-6">
-          <Category setDeleteResponseFromCategory={setDeleteResponseFromCategory}/>
+          <Category deleteResponseFromView={deleteResponseFromView} setDeleteResponseFromCategory={setDeleteResponseFromCategory}/>
         </div>
       </div>
     </div>
